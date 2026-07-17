@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title id="title"></title>
+  <link rel="stylesheet" href="./assets/css/style.css">
+</head>
+
+<body>
+
+  <!-- Site header shared across every page showing the logo and navigation links -->
+  <header class="site-header">
+    <div class="wrap">
+      <a href="index.html" class="logo">Larder <span class="amp">&amp;</span> Co.</a>
+      <nav class="main-nav">
+        <a href="index.html">Home</a>
+        <a href="view-product.html">Shop</a>
+        <a href="add-product.html">Sell With Us</a>
+        <a href="manage-products.html">Manage</a>
+        <a href="cart.html" class="cart-chip">Cart <span class="count">3</span></a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- Empty wrapper filled entirely at runtime with the details of one single product -->
+    <section class="section">
+      <div class="wrap product">
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer shared across every page with quick links -->
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>&copy; 2026 Larder &amp; Co. Sourced, not manufactured.</p>
+      <div class="foot-links">
+        <a href="view-product.html">Shop</a>
+        <a href="add-product.html">Sell</a>
+        <a href="manage-products.html">Manage</a>
+        <a href="cart.html">Cart</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Main script reads which product to show from the URL then builds the whole page for it -->
+  <script>
+    // Read which product to show from the index value placed in the URL by the shop page
+    const params = new URLSearchParams(window.location.search);
+    let id = params.get("index");
+    let cart=1;
+
+    // Load the inventory and cart from local storage or start with empty arrays if nothing is stored
+    let products = JSON.parse(localStorage.getItem("Inventory")) || [];
+    let cartDetails=JSON.parse(localStorage.getItem("Cart")) || [];
+
+    let count=cartDetails.length
+    document.querySelector(".count").innerHTML=count;
+
+    // Set the browser tab title to match the product being viewed
+    document.getElementById("title").innerHTML=products[id].product + " — " + products[id].maker + " | Larder & Co."
+
+
+    // If this product is already sitting in the cart start the quantity stepper at that same amount
+    cartDetails.forEach(cartDetails=>{
+      if(cartDetails.product==products[id].product){
+        cart=cartDetails.cart;
+      }
+    });
+
+    // Builds the entire product detail markup from the chosen product and inserts it into the page
+    function loadProduct() {
+      let html = `
+      <p class="crumb"><a href="index.html">Home</a> / <a href="view-product.html">Shop</a> / ${products[id].product}</p>
+
+      <div class="product-detail">
+
+        <div class="product-gallery">
+          <div class="jar-art">
+            <div class="photo"><img src="${products[id].image}" alt="${products[id].product}"></div>
+          </div>
+        </div>
+
+        <div class="product-info">
+          
+          <h1>${products[id].product}</h1>
+          <p class="maker" style="font-size:1.1rem; color: var(--ink-soft); margin-top:-0.4em;">${products[id].maker}</p>
+
+          <div class="price-row">
+            <span class="price">₹${products[id].price}</span>
+          </div>
+
+          <p>${products[id].description}</p>
+
+          <table class="spec-table">
+            <tr><td>Origin</td><td>${products[id].maker}</td></tr>
+            <tr><td>Category</td><td>${products[id].category}</td></tr>
+            <tr><td>Diet</td><td>${products[id].diet}</td></tr>
+            <tr><td>Stock</td><td>${products[id].stock} Available</td></tr>
+          </table>
+
+          <div class="detail-actions">
+            <div class="qty-stepper">
+              <button type="button" aria-label="Decrease quantity" onclick="decreaseQuantity()">−</button>
+              <input type="text" value="${cart}" inputmode="numeric" aria-label="Quantity">
+              <button type="button" aria-label="Increase quantity" onclick="increaseQuantity()">+</button>
+            </div>
+            <button class="btn btn-primary" onclick="addToCart(${id},${cart})">Add to cart</button>
+          </div>
+
+        </div>
+      </div>
+    `;
+
+    document.querySelector(".product").innerHTML=html;
+    }
+
+    // Lowers the quantity stepper by one but never below one
+    function decreaseQuantity(){
+      if(cart===1){
+        alert("Minimum 1 is required");
+      }
+      else{
+        cart--;
+        loadProduct();
+      }
+    }
+
+    // Raises the quantity stepper by one while respecting available stock and a maximum of five
+    function increaseQuantity(){
+      if(cart==products[id].stock){
+        alert("You can't add more");
+      }
+      else if(cart===5){
+        alert("You can't add more than 5");
+      }
+      else{
+        cart++;
+        loadProduct();
+      }
+    }
+
+    // Adds the current product and chosen quantity to the cart or updates the quantity if it is already there
+    function addToCart(index,cart){
+      let found=false,execute=true;
+      cartDetails.forEach(cartProduct=>{
+        if(cartProduct.id==products[index].id){
+          found=true;
+          // product found in cart
+          if(cartProduct.cart!=cart){
+            cartProduct.cart=cart;
+            cartProduct.sum=cartProduct.price*cart;
+            localStorage.setItem("Cart",JSON.stringify(cartDetails));
+            alert("Added To Cart");
+            execute=false;
+          }
+        }
+      });
+      
+      if(!found){
+        let sum=products[index].price*cart;
+        cartDetails.push({...products[index],cart,sum});
+        localStorage.setItem("Cart",JSON.stringify(cartDetails));
+        alert("Added To Cart");
+        document.querySelector(".count").innerHTML=cartDetails.length;
+      }
+      else{
+        if(execute){
+          alert("Already Added");
+        }
+      }
+    }
+
+    // Render the product page as soon as the script runs
+    loadProduct();
+  </script>
+
+</body>
+
+</html>
+
+<!-- <a href="cart.html?index=${id}&cart=${cart}" class="btn btn-primary">Add to cart</a> -->

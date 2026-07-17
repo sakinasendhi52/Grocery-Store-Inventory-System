@@ -1,0 +1,539 @@
+<!doctype html>
+<html lang="en">
+  <!-- Head section holding page metadata title and the shared stylesheet link -->
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Larder & Co. — Small-batch pantry goods</title>
+    <link rel="stylesheet" href="./assets/css/style.css" />
+  </head>
+
+  <body>
+    <!-- Site header shown on every page containing the logo and main navigation -->
+    <header class="site-header">
+      <div class="wrap">
+        <a href="index.html" class="logo"
+          >Larder <span class="amp">&amp;</span> Co.</a
+        >
+        <!-- Main navigation links pointing to each page of the site plus the cart chip showing item count -->
+        <nav class="main-nav">
+          <a href="index.html" aria-current="page">Home</a>
+          <a href="view-product.html">Shop</a>
+          <a href="add-product.html">Sell With Us</a>
+          <a href="manage-products.html">Manage</a>
+          <a href="cart.html" class="cart-chip"
+            >Cart <span class="count">3</span></a
+          >
+        </nav>
+      </div>
+    </header>
+
+    <!-- Main content area holding every section of the home page -->
+    <main>
+      <!-- Hero section with the tagline main heading and the two call to action buttons -->
+      <section class="hero">
+        <div class="wrap">
+          <div>
+            <p class="eyebrow">Small batches, honest labels</p>
+            <h1>Pantry staples worth<br />reading the label on.</h1>
+            <p class="lede">
+              Honey, oil, preserves, and salt from growers and makers we've
+              actually met no distributor in between. Everything ships from
+              the maker's own kitchen or grove.
+            </p>
+            <div class="hero-actions">
+              <a href="view-product.html" class="btn btn-primary"
+                >Fill your pantry</a
+              >
+              <a href="add-product.html" class="btn btn-outline"
+                >Sell your goods</a
+              >
+            </div>
+          </div>
+          <div class="seal-stage" aria-hidden="true">
+            <div class="seal">
+              <div class="seal-text">
+                <strong>L&amp;Co</strong><span>Est. 2014</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Aisle section showing the main product categories as clickable cards -->
+      <section class="section">
+        <div class="wrap">
+          <div class="section-head">
+            <h2>Shop by aisle</h2>
+          </div>
+          <div class="aisles">
+            <a class="aisle" href="view-product.html">
+              <span class="num">01</span>
+              <h3>Fruits &amp; Vegetables</h3>
+              <p>Small-batch fruit, slow-cooked in copper.</p>
+            </a>
+            <a class="aisle" href="view-product.html">
+              <span class="num">02</span>
+              <h3>Dairy Products</h3>
+              <p>Cold-pressed, single-origin, unfiltered.</p>
+            </a>
+            <a class="aisle" href="view-product.html">
+              <span class="num">03</span>
+              <h3>Snacks</h3>
+              <p>Ground to order, smoked over real wood.</p>
+            </a>
+            <a class="aisle" href="view-product.html">
+              <span class="num">04</span>
+              <h3>Beverages</h3>
+              <p>Cave-aged wheels from three-cow farms.</p>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Newest products section this grid gets filled dynamically by the loadNewProducts function below -->
+      <section class="section">
+        <div class="wrap">
+          <div class="section-head">
+            <h2>New in the pantry</h2>
+            <a href="view-product.html" class="btn btn-ghost">View all →</a>
+          </div>
+          <!-- Empty container populated at runtime with the four most recently added products -->
+          <div class="grid new-products"></div>
+        </div>
+      </section>
+
+      <!-- About section telling the story of the brand and showing simple stats -->
+      <section
+        class="section"
+        style="border-top: 1px solid var(--kraft-border)"
+      >
+        <div class="wrap">
+          <div class="about-layout">
+            <div class="photo">
+              <img
+                src="https://images.unsplash.com/photo-1488459716781-31db52582fe9?w=700&q=80"
+                alt="Farmers market stall with pantry goods"
+              />
+            </div>
+            <div>
+              <p class="eyebrow">About Larder &amp; Co.</p>
+              <h2 style="font-size: clamp(1.7rem, 3vw, 2.3rem)">
+                A shelf built one maker at a time.
+              </h2>
+              <p style="max-width: 52ch">
+                We started in a single farmers market stall in 2014, selling
+                honey from the hives behind the founder's house. Today we work
+                with a small, growing roster of independent makers no
+                distributors, no anonymous supply chains. Every listing is
+                written by the person who actually made the thing and every
+                order ships straight from their kitchen, grove or dairy to your
+                door.
+              </p>
+              <p style="max-width: 52ch">
+                If it's on our shelf, we've tasted it, asked about how it's
+                made and would happily serve it at our own table.
+              </p>
+              <div class="about-stats">
+                <div class="stat"><strong>60+</strong><span>Makers</span></div>
+                <div class="stat">
+                  <strong>37</strong><span>Goods listed</span>
+                </div>
+                <div class="stat"><strong>2014</strong><span>Est.</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Contact section with company details and a simple contact form -->
+      <section
+        class="section"
+        style="border-top: 1px solid var(--kraft-border)"
+      >
+        <div class="wrap">
+          <div class="section-head">
+            <h2>Get in touch</h2>
+          </div>
+          <div class="contact-layout">
+            <div class="contact-info">
+              <h3>We read every message</h3>
+              <p>
+                Questions about an order, a maker you'd love to see on our
+                shelf, or interested in selling with us? Send a note a real
+                person on our small team will get back to you.
+              </p>
+              <div class="info-row">
+                <span class="label">Email</span>
+                <span>hello@larderandco.example</span>
+              </div>
+              <div class="info-row">
+                <span class="label">Phone</span>
+                <span>(555) 019-4482</span>
+              </div>
+              <div class="info-row">
+                <span class="label">Studio</span>
+                <span>412 Kettle Row, Sonoma County, CA</span>
+              </div>
+            </div>
+            <div class="form-card">
+              <form class="contact-form" action="#" method="post" id="form">
+                <div class="field">
+                  <label for="contact-name">Name</label>
+                  <input
+                    type="text"
+                    id="contact-name"
+                    name="contact-name"
+                    placeholder="Your name"
+                    required
+                  />
+                </div>
+                <div class="field">
+                  <label for="contact-email">Email</label>
+                  <input
+                    type="email"
+                    id="contact-email"
+                    name="contact-email"
+                    placeholder="you@example.com"
+                    required
+                  />
+                </div>
+                <div class="field">
+                  <label for="contact-message">Message</label>
+                  <textarea
+                    id="contact-message"
+                    name="contact-message"
+                    placeholder="How can we help?"
+                    required
+                  ></textarea>
+                </div>
+                <div class="form-actions" style="margin-top: 0.5rem">
+                  <button type="submit" class="btn btn-primary">
+                    Send message
+                  </button>
+                </div>
+              </form>
+              <div id="displayMsg" style="display: none">
+                <h3 style="text-align: center; color: var(--tomato)">
+                  Form Submitted Successfully!
+                </h3>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer shown on every page with brand info newsletter signup and quick links -->
+    <footer class="site-footer">
+      <div class="wrap footer-top">
+        <div class="footer-brand">
+          <a href="index.html" class="logo"
+            >Larder <span class="amp">&amp;</span> Co.</a
+          >
+          <p>
+            Product staples worth reading the label on sourced from makers
+            we've actually met.
+          </p>
+          <!-- Newsletter signup form handled purely on the client since there is no backend -->
+          <div class="footer-newsletter">
+            <form action="#" id="subscribeForm">
+              <input
+                type="email"
+                id="emailInput"
+                placeholder="Your email"
+                required
+                style="width: 190px"
+              />
+              <button type="submit" class="btn btn-outline" style="width: 70px">
+                Join
+              </button>
+            </form>
+            <h4
+              id="subscribeMsg"
+              style="text-align: center; display: none; color: var(--tomato)"
+            >
+              Thank you for Subscribing!
+            </h4>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Shop</h4>
+          <ul>
+            <li><a href="view-product.html">All goods</a></li>
+            <li><a href="view-product.html">Fruits &amp; Vegetables</a></li>
+            <li><a href="view-product.html">Dairy &amp; Snacks</a></li>
+            <li><a href="view-product.html">Beverages</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Sell</h4>
+          <ul>
+            <li><a href="add-product.html">List a product</a></li>
+            <li><a href="manage-products.html">Manage products</a></li>
+            <li><a href="#">Maker guidelines</a></li>
+            <li><a href="#">Pricing &amp; fees</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Info</h4>
+          <ul>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Shipping</a></li>
+            <li><a href="#">FAQ</a></li>
+            <li><a href="cart.html">Cart</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Larder &amp; Co. Sourced, not manufactured.</p>
+        <div class="foot-links">
+          <a href="view-product.html">Shop</a>
+          <a href="add-product.html">Sell</a>
+          <a href="manage-products.html">Manage</a>
+          <a href="cart.html">Cart</a>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Main script for the home page handles product seeding newest products and both small forms -->
+    <script>
+      // Read the cart and inventory arrays from local storage or start with an empty array if nothing is stored yet
+      let cartDetails = JSON.parse(localStorage.getItem("Cart")) || [];
+      let products = JSON.parse(localStorage.getItem("Inventory")) || [];
+
+      // First time setup only runs when the inventory array is empty and fills it with sample starter products
+      if (products.length == []) {
+        const defaultProducts = [
+          {
+            id: Date.now(),
+            product: "Alphonso Mangoes (1kg)",
+            maker: "Meadowlight Apiary",
+            category: "Fruits",
+            diet: "Organic",
+            price: 450,
+            stock: 40,
+            image:
+              "https://images.pexels.com/photos/37816783/pexels-photo-37816783.jpeg",
+            description:
+              "Sun-ripened Alphonso mangoes, hand-picked at peak sweetness from a small family orchard.",
+          },
+          {
+            id: Date.now() + 1,
+            product: "Baby Spinach (250g)",
+            maker: "Ferro and Sons",
+            category: "Vegetables",
+            diet: "Vegan",
+            price: 60,
+            stock: 55,
+            image:
+              "https://images.pexels.com/photos/8845078/pexels-photo-8845078.jpeg",
+            description:
+              "Tender baby spinach leaves, washed and ready to toss into salads, curries, or smoothies.",
+          },
+          {
+            id: Date.now() + 2,
+            product: "Farm Fresh Yogurt (500g)",
+            maker: "Ember and Oak",
+            category: "Dairy",
+            diet: "Gluten Free",
+            price: 120,
+            stock: 30,
+            image:
+              "https://images.pexels.com/photos/5191723/pexels-photo-5191723.jpeg",
+            description:
+              "Thick, creamy yogurt set the traditional way from grass-fed cow's milk no additives, no shortcuts.",
+          },
+          {
+            id: Date.now() + 3,
+            product: "Makhana (Fox Nuts, 150g)",
+            maker: "Ferro and Sons",
+            category: "Snacks",
+            diet: "Gluten Free",
+            price: 200,
+            stock: 45,
+            image:
+              "https://images.pexels.com/photos/7051132/pexels-photo-7051132.jpeg",
+            description:
+              "Light, crunchy fox nuts roasted with a touch of rock salt a guilt-free snack straight from the wetlands.",
+          },
+          {
+            id: Date.now() + 4,
+            product: "Cold-Pressed Orange Juice (1L)",
+            maker: "Meadowlight Apiary",
+            category: "Beverages",
+            diet: "Vegan",
+            price: 220,
+            stock: 25,
+            image:
+              "https://images.pexels.com/photos/9273070/pexels-photo-9273070.jpeg",
+            description:
+              "No pulp lost, no sugar added just fresh oranges cold-pressed and bottled the same morning.",
+          },
+          {
+            id: Date.now() + 5,
+            product: "Heirloom Tomatoes (500g)",
+            maker: "Ember and Oak",
+            category: "Vegetables",
+            diet: "Organic",
+            price: 90,
+            stock: 35,
+            image:
+              "https://images.pexels.com/photos/12527010/pexels-photo-12527010.jpeg",
+            description:
+              "A mixed basket of heirloom tomatoes, grown without pesticides for a richer, more complex flavor.",
+          },
+          {
+            id: Date.now() + 6,
+            product: "Almond Milk (1L)",
+            maker: "Ferro and Sons",
+            category: "Beverages",
+            diet: "Dairy Free",
+            price: 180,
+            stock: 20,
+            image:
+              "https://images.pexels.com/photos/17272972/pexels-photo-17272972.jpeg",
+            description:
+              "Unsweetened almond milk, slow-blended for a smooth, naturally nutty finish no dairy, no fillers.",
+          },
+          {
+            id: Date.now() + 7,
+            product: "Dried Mixed Berries (200g)",
+            maker: "Meadowlight Apiary",
+            category: "Snacks",
+            diet: "Vegan",
+            price: 260,
+            stock: 28,
+            image:
+              "https://images.pexels.com/photos/8821134/pexels-photo-8821134.jpeg",
+            description:
+              "A naturally sweet mix of dried cranberries, blueberries, and mulberries no added sugar or preservatives.",
+          }
+        ];
+        // Older sample product list kept here as backup reference and not currently used
+        // const defaultProducts = [
+        //   {
+        //     id: Date.now(),
+        //     product: "Wildflower Honey",
+        //     maker: "Meadowlight Apiary",
+        //     category: "Fruits",
+        //     diet: "Gluten Free",
+        //     price: 200,
+        //     stock: 18,
+        //     image:
+        //       "https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=400&q=80",
+        //     description:
+        //       "Raw and unfiltered wildflower honey, pulled from hives set among clover and wild aster.",
+        //   },
+        //   {
+        //     id: Date.now() + 1,
+        //     product: "Blood Orange Marmalade",
+        //     maker: "Ferro and Sons",
+        //     category: "Dairy",
+        //     diet: "Vegan",
+        //     price: 150,
+        //     stock: 25,
+        //     image:
+        //       "https://images.unsplash.com/photo-1519996529931-28324d5a630e?w=400&q=80",
+        //     description:
+        //       "Tangy blood orange marmalade, slow-cooked with peel for a bold citrus bite.",
+        //   },
+        //   {
+        //     id: Date.now() + 2,
+        //     product: "Sourdough Boule",
+        //     maker: "Ember and Oak",
+        //     category: "Vegetables",
+        //     diet: "Vegan",
+        //     price: 800,
+        //     stock: 20,
+        //     image:
+        //       "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=400&q=80",
+        //     description:
+        //       "Naturally leavened and slow-fermented for depth — a crackling crust and airy, tangy crumb.",
+        //   },
+        //   {
+        //     id: Date.now() + 3,
+        //     product: "Aged Cheddar Wheel",
+        //     maker: "Hollow Creek Dairy",
+        //     category: "Dairy",
+        //     diet: "Gluten Free",
+        //     price: 2000,
+        //     stock: 10,
+        //     image:
+        //       "https://images.unsplash.com/photo-1552767059-ce182ead6c1b?w=400&q=80",
+        //     description:
+        //       "Slow-aged to sharp, nutty perfection — crafted the traditional way, with nothing rushed and nothing added.",
+        //   },
+        // ];
+        // Save the starter products into local storage so they persist across future visits
+        localStorage.setItem("Inventory", JSON.stringify(defaultProducts));
+        products = JSON.parse(localStorage.getItem("Inventory"));
+      }
+
+      // Show how many items are currently in the cart next to the cart link
+      let count = cartDetails.length;
+      document.querySelector(".count").innerHTML = count;
+
+      // Builds the newest products grid by walking backward through the product list and marking the very first one as New
+      function loadNewProducts() {
+        html = "";
+        let productCount = products.length,
+          count = 0;
+        for (i = 0; i < 4; i++) {
+          if (count === 0) {
+            html += `
+          <a class="jar" href="product.html?index=${productCount - 1}">
+          <div class="jar-art">
+            <span class="tag">New</span>
+            <div class="photo"><img src="${products[productCount - 1].image}" alt="${products[productCount - 1].product}"></div>
+          </div>
+          <div class="jar-meta">
+            <span class="category">${products[productCount - 1].category}</span>
+            <h3>${products[productCount - 1].product}</h3>
+            <p class="maker">${products[productCount - 1].maker}</p>
+            <p class="price">₹${products[productCount - 1].price}</p>
+          </div>
+          </a>
+          `;
+          } else {
+            html += `
+          <a class="jar" href="product.html?index=${productCount - 1}">
+          <div class="jar-art">
+            <div class="photo"><img src="${products[productCount - 1].image}" alt="${products[productCount - 1].product}"></div>
+          </div>
+          <div class="jar-meta">
+            <span class="category">${products[productCount - 1].category}</span>
+            <h3>${products[productCount - 1].product}</h3>
+            <p class="maker">${products[productCount - 1].maker}</p>
+            <p class="price">₹${products[productCount - 1].price}</p>
+          </div>
+          </a>
+          `;
+          }
+          productCount--;
+          count++;
+        }
+        document.querySelector(".new-products").innerHTML = html;
+      }
+
+      // Handles the contact form submit by hiding the form and showing a thank you message instead of sending anything
+      document.getElementById("form").addEventListener("submit", (e) => {
+        e.preventDefault();
+        document.getElementById("displayMsg").style.display = "block";
+        document.getElementById("form").style.display = "none";
+      });
+
+      // Handles the newsletter form submit the same way by swapping the form for a short thank you note
+      document
+        .getElementById("subscribeForm")
+        .addEventListener("submit", (e) => {
+          e.preventDefault();
+          document.getElementById("subscribeForm").style.display = "none";
+          document.getElementById("subscribeMsg").style.display = "block";
+        });
+
+      // Render the newest products grid once the page has loaded
+      loadNewProducts();
+    </script>
+  </body>
+</html>

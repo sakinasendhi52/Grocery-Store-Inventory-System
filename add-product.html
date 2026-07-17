@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sell With Us — Larder & Co.</title>
+  <link rel="stylesheet" href="./assets/css/style.css">
+</head>
+
+<body>
+
+  <!-- Site header shared across every page showing the logo and navigation links -->
+  <header class="site-header">
+    <div class="wrap">
+      <a href="index.html" class="logo">Larder <span class="amp">&amp;</span> Co.</a>
+      <nav class="main-nav">
+        <a href="index.html">Home</a>
+        <a href="view-product.html">Shop</a>
+        <a href="add-product.html" aria-current="page">Sell With Us</a>
+        <a href="manage-products.html">Manage</a>
+        <a href="cart.html" class="cart-chip">Cart <span class="count">3</span></a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- Main form section used both for adding a brand new product and for editing one that already exists -->
+    <section class="section">
+      <div class="wrap">
+
+        <p class="crumb"><a href="index.html">Home</a> / Sell With Us</p>
+        <div class="section-head">
+          <h2>List a pantry good</h2>
+        </div>
+        <p style="max-width: 60ch; margin-top:-1rem; margin-bottom:2rem;">Tell us about what you make the way you'd tell
+          a customer at a farmers market stall where it's from, what's in it and how long it keeps.</p>
+
+        <!-- Product form collects every field needed to build a single product object -->
+        <form class="form-card" action="#" method="post" id="form">
+          <div class="form-grid">
+
+            <div class="field">
+              <label for="product-name">Product name</label>
+              <input type="text" id="product-name" name="product-name" placeholder="e.g. Wildflower Honey" required>
+            </div>
+
+            <div class="field">
+              <label for="maker">Maker / farm name</label>
+              <input type="text" id="maker-name" name="maker" placeholder="e.g. Meadowlight Apiary" required>
+            </div>
+
+            <div class="field">
+              <label for="category">Category</label>
+              <select id="category" name="category" required>
+                <option value="">Select a category</option>
+                <option value="Fruits">Fruits</option>
+                <option value="Vegetables">Vegetables</option>
+                <option value="Dairy Product">Dairy Product</option>
+                <option value="Snacks">Snacks</option>
+                <option value="Beverages">Beverages</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="diet">Diet label</label>
+              <select id="diet" name="diet">
+                <option value="">None specified</option>
+                <option value="Vegan">Vegan</option>
+                <option value="Gluten Free">Gluten-free</option>
+                <option value="Organic">Organic</option>
+                <option value="Dairy Free">Dairy-free</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="price">Price (INR)</label>
+              <input type="number" id="price" name="price" placeholder="e.g. 1350" min="0" step="10" required>
+            </div>
+
+            <div class="field">
+              <label for="stock">Units in stock</label>
+              <input type="number" id="stock" name="stock" placeholder="e.g. 18" min="1" required>
+            </div>
+
+            <div class="field full">
+              <label for="image">Product photo URL</label>
+              <input type="url" id="image" name="image" placeholder="https://example.com/jar.jpg" required>
+            </div>
+
+            <div class="field full">
+              <label for="description">Description</label>
+              <textarea id="description" name="description"
+                placeholder="Where it is from, how it is made and what makes this batch worth trying." required></textarea>
+            </div>
+
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Add to the shelf</button>
+            <button type="reset" class="btn btn-ghost">Clear form</button>
+          </div>
+        </form>
+
+        <!-- Hidden success message shown in place of the form once a submit finishes -->
+        <div id="formMsg" style="display: none; text-align: center;" class="form-card">
+          <h3 id="msg" style="text-align: center; color: var(--tomato);"></h3>
+          <button type="submit" class="btn btn-primary" style="margin-top: 30px;" onclick="addProduct()">Add New Product</button>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer shared across every page with quick links -->
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>&copy; 2026 Larder &amp; Co. Sourced, not manufactured.</p>
+      <div class="foot-links">
+        <a href="view-product.html">Shop</a>
+        <a href="add-product.html">Sell</a>
+        <a href="manage-products.html">Manage</a>
+        <a href="cart.html">Cart</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Script reads the query string to know whether this page is adding a new product or editing one that exists -->
+  <script>
+    // Reads the id from the URL if present this tells the page whether it is in edit mode
+    const params = new URLSearchParams(window.location.search);
+    let editId = params.get("id");
+
+    // Load the existing inventory and cart from local storage or start with empty arrays
+    let products = JSON.parse(localStorage.getItem("Inventory")) || [];
+    let cartDetails=JSON.parse(localStorage.getItem("Cart")) || [];
+
+    let count=cartDetails.length
+    document.querySelector(".count").innerHTML=count;
+
+
+    // When an id is present in the URL fill every input with that product current values so it can be edited
+    if (editId != null) {
+      document.getElementById("product-name").value = products[editId].product;
+      document.getElementById("maker-name").value = products[editId].maker;
+      document.getElementById("category").value = products[editId].category;
+      document.getElementById("diet").value = products[editId].diet;
+      document.getElementById("price").value = products[editId].price;
+      document.getElementById("stock").value = products[editId].stock;
+      document.getElementById("image").value = products[editId].image;
+      document.getElementById("description").value = products[editId].description;
+    }
+
+    // Runs whenever the form is submitted for either adding a new product or saving edits to an existing one
+    document.getElementById("form").addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      // Reuse the same id when editing otherwise generate a fresh unique id from the current timestamp
+      let id;
+      if(editId!=null){
+        id=products[editId].id;
+      }
+      else{
+        id=Date.now();
+      }
+
+      // Read every field typed into the form
+      let product = document.getElementById("product-name").value;
+      let maker = document.getElementById("maker-name").value;
+      let category = document.getElementById("category").value;
+      let diet = document.getElementById("diet").value;
+      let price = document.getElementById("price").value;
+      let stock = document.getElementById("stock").value;
+      let image = document.getElementById("image").value;
+      let description = document.getElementById("description").value;
+
+      // Group all the collected fields into a single product object
+      let productDetails = {
+        id,product, maker, category, diet, price, stock, image, description
+      };
+
+      // No id was being edited so this is a brand new product being appended to the list
+      if (editId == null) {
+        products.push(productDetails);
+        document.getElementById("formMsg").style.display="block";
+        document.getElementById("form").style.display="none";
+        document.getElementById("msg").innerHTML="New Product Added!";
+      }
+      // An id was being edited so replace that product in place instead of adding a new one
+      else{
+        products.splice(editId, 1, productDetails);
+
+        document.getElementById("formMsg").style.display="block";
+        document.getElementById("form").style.display="none";
+
+        // update product in cart
+        cartDetails.forEach((cartProduct,index)=>{
+          if(cartProduct.id===productDetails.id){
+            cartDetails.splice(index,1,{...productDetails,cart:cartProduct.cart,sum:(price*cartProduct.cart)});
+            localStorage.setItem("Cart",JSON.stringify(cartDetails));
+          }
+        });
+
+        document.getElementById("msg").innerHTML="Product Updated!";
+      }
+
+      // Save the updated product list back to local storage and clear the form fields
+      localStorage.setItem("Inventory", JSON.stringify(products));
+      e.target.reset();
+    });
+
+    // Brings the form back so the seller can add another product right after a successful submit
+    function addProduct(){
+      document.getElementById("formMsg").style.display="none";
+      document.getElementById("form").style.display="block";
+    }
+  </script>
+
+</body>
+
+</html>

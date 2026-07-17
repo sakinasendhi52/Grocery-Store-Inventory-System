@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Products — Larder & Co.</title>
+  <link rel="stylesheet" href="./assets/css/style.css">
+</head>
+
+<body>
+
+  <!-- Site header shared across every page showing the logo and navigation links -->
+  <header class="site-header">
+    <div class="wrap">
+      <a href="index.html" class="logo">Larder <span class="amp">&amp;</span>
+        Co.</a>
+      <nav class="main-nav">
+        <a href="index.html">Home</a>
+        <a href="view-product.html">Shop</a>
+        <a href="add-product.html">Sell With Us</a>
+        <a href="manage-products.html" aria-current="page">Manage</a>
+        <a href="cart.html" class="cart-chip">Cart<span class="count">3</span></a>
+      </nav>
+    </div>
+  </header>
+
+    <!-- Main section showing every listed product as a row in a table -->
+  <main>
+    <section class="section">
+      <div class="wrap-other">
+
+        <p class="crumb"><a href="index.html">Home</a> / Manage Products</p>
+        <div class="section-head">
+          <h2>Your listed goods</h2>
+          <a href="add-product.html" class="btn btn-primary">+ List a new
+            product</a>
+        </div>
+
+        <div class="manage-toolbar">
+          <p class="count" id="product-count"></p>
+        </div>
+
+        <!-- Table skeleton only the header row is fixed here the body rows are built entirely by JS -->
+        <table class="manage-table" id="manage-table">
+          <thead>
+            <tr>
+              <th>Id</th>
+              <th>Image</th>
+              <th>Product</th>
+              <th>Category</th>
+              <th>Diet</th>
+              <th>Price</th>
+              <th>Stock</th>
+              <th>Description</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <!-- Empty body populated at runtime with one row for every product in the inventory -->
+          <tbody class="products" style="width: 1083px;">
+          </tbody>
+        </table>
+
+        
+        
+
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer shared across every page with quick links -->
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>&copy; 2026 Larder &amp; Co. Sourced, not manufactured.</p>
+      <div class="foot-links">
+        <a href="view-product.html">Shop</a>
+        <a href="add-product.html">Sell</a>
+        <a href="manage-products.html">Manage</a>
+        <a href="cart.html">Cart</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Main script reads the inventory and renders it as rows also handles product deletion -->
+  <script>
+    // Load the inventory and cart from local storage or start with empty arrays if nothing is stored
+    products = JSON.parse(localStorage.getItem("Inventory")) || [];
+    let cartDetails=JSON.parse(localStorage.getItem("Cart")) || [];
+
+    let count=cartDetails.length
+    document.querySelector(".count").innerHTML=count;
+
+    // let id = document.querySelector(".p-id");
+    // let product = document.querySelector(".p-name");
+    // let maker = document.querySelector(".p-maker");
+    // let category = document.querySelector(".p-category");
+    // let diet = document.querySelector(".p-diet");
+    // let price = document.querySelector(".p-price");
+    // let stock = document.querySelector(".p-stock");
+    // let image = document.querySelector(".p-image");
+    let description = document.querySelector(".p-category div");
+
+    // Builds every row of the table from the products array or shows a friendly empty state when there are none
+    function loadProducts() {
+      // No products at all so show the empty state message instead of a table body
+      if(products.length==0){
+        document.querySelector(".products").innerHTML=`
+          <tr>
+          <td colspan="8"><div class="manage-empty" id="manage-empty">
+          <div class="seal-stage" style="width:160px; margin:0 auto 1.25rem;">
+            <div class="seal">
+              <div class="seal-text"><strong>L&amp;Co</strong><span>Est.
+                  2014</span></div>
+            </div>
+          </div>
+          <h3>Nothing listed yet</h3>
+          <p>Everything you add gets tracked here so you can edit or take it
+            off the shelf anytime.</p>
+          <a href="add-product.html" class="btn btn-primary">List a
+            product</a>
+        </div></td>
+        </tr>
+        `;
+      }
+      // Walk through every product and build its table row keeping the delete button disabled for the very first five rows
+      else{
+        let html = "";
+      products.map((p, index) => {
+        if(index<8){
+          html += `
+          <tr class="manage-row">
+            <td class="p-id">${p.id}</td>
+            <td class="p-image"><a href="${p.image}" target="_blank"><img alt="Product" src="${p.image}"></a></td>
+            <td>
+              <div class="p-name">${p.product}</div>
+              <div class="p-maker">${p.maker}</div>
+            </td>
+            <td class="p-category">${p.category}</td>
+            <td class="p-diet">${p.diet}</td>
+            <td class="p-price">${p.price}</td>
+            <td class="p-stock">${p.stock}</td>
+            <td class="p-description">
+              <div class="desc-clamp">${p.description}</div>
+            </td>
+            <td class="row-actions">
+              <a href="add-product.html?id=${index}" class="btn btn-outline">Edit</a>
+              <button type="button" class="btn btn-danger" onclick="deleteProduct(${index})" data-delete disabled>Delete</button>
+            </td>
+          </tr>
+        `;
+        }
+        else{
+          html += `
+          <tr class="manage-row">
+            <td class="p-id">${p.id}</td>
+            <td class="p-image"><a href="${p.image}" target="_blank"><img alt="Product" src="${p.image}"></a></td>
+            <td>
+              <div class="p-name">${p.product}</div>
+              <div class="p-maker">${p.maker}</div>
+            </td>
+            <td class="p-category">${p.category}</td>
+            <td class="p-diet">${p.diet}</td>
+            <td class="p-price">${p.price}</td>
+            <td class="p-stock">${p.stock}</td>
+            <td class="p-description">
+              <div class="desc-clamp">${p.description}</div>
+            </td>
+            <td class="row-actions">
+              <a href="add-product.html?id=${index}" class="btn btn-outline")">Edit</a>
+              <button type="button" class="btn btn-danger" onclick="deleteProduct(${index})" data-delete>Delete</button>
+            </td>
+          </tr>
+        `;
+        }
+        document.querySelector(".products").innerHTML = html;
+      });
+      }
+      // Update the small count of how many products are currently listed
+      document.getElementById("product-count").innerHTML = products.length + " Product Listed";
+    }
+
+    // Render the table as soon as the page loads
+    loadProducts();
+
+    // Removes a single product from the inventory after the seller confirms
+    function deleteProduct(id) {
+    if (confirm(`Are you sure you want to delete ${products[id].product} ?`)) {
+      products.splice(id, 1);
+      localStorage.setItem("Inventory", JSON.stringify(products));
+      loadProducts();
+      }
+    }
+  </script>
+
+</body>
+
+</html>

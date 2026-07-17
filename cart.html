@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Cart — Larder & Co.</title>
+  <link rel="stylesheet" href="./assets/css/style.css">
+</head>
+
+<body>
+
+  <!-- Site header shared across every page showing the logo and navigation links -->
+  <header class="site-header">
+    <div class="wrap">
+      <a href="index.html" class="logo">Larder <span class="amp">&amp;</span>
+        Co.</a>
+      <nav class="main-nav">
+        <a href="index.html">Home</a>
+        <a href="view-product.html">Shop</a>
+        <a href="add-product.html">Sell With Us</a>
+        <a href="manage-products.html">Manage</a>
+        <a href="cart.html" class="cart-chip" aria-current="page">Cart <span class="count"></span></a>
+      </nav>
+    </div>
+  </header>
+
+    <!-- Main cart section split into the list of items on the left and the order summary on the right -->
+  <main>
+    <section class="section">
+      <div class="wrap">
+
+        <p class="crumb"><a href="index.html">Home</a> / Cart</p>
+        <div class="section-head">
+          <h2>Your cart</h2>
+        </div>
+
+        <div class="cart-layout">
+
+          <!-- Empty container populated at runtime with every cart row -->
+          <div class="cart-list"></div>
+
+          <!-- Order summary showing subtotal shipping tax and the final total -->
+          <aside class="summary">
+            <h3>Order summary</h3>
+            <div class="summary-row">
+              <span>Subtotal</span>
+              <span class="val sub-total"></span>
+            </div>
+            <div class="summary-row">
+              <span>Shipping</span>
+              <span class="val shipping"></span>
+            </div>
+            <div class="summary-row"><span>Tax</span><span class="val tax"></span></div>
+            <div class="summary-row total"><span>Total</span><span class="val total"></span></div>
+
+            <div class="promo">
+              <input type="text" placeholder="Promo code">
+              <button class="btn btn-outline">Apply</button>
+            </div>
+
+            <button class="btn btn-primary btn-block">Checkout</button>
+            <button class="btn btn-primary btn-block" style="margin-top: 20px;" onclick="clearCart()">Clear
+              Cart</button>
+            <a href="view-product.html" class="btn btn-ghost btn-block" style="margin-top:0.75rem;">Continue
+              shopping</a>
+          </aside>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer shared across every page with quick links -->
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>&copy; 2026 Larder &amp; Co. Sourced, not manufactured.</p>
+      <div class="foot-links">
+        <a href="view-product.html">Shop</a>
+        <a href="add-product.html">Sell</a>
+        <a href="manage-products.html">Manage</a>
+        <a href="cart.html">Cart</a>
+
+      </div>
+    </div>
+  </footer>
+
+  <!-- Main cart script reads cart and inventory data and keeps the page in sync with local storage -->
+  <script>
+    // Load the inventory and the cart from local storage or start with empty arrays if nothing is stored
+    let products = JSON.parse(localStorage.getItem("Inventory")) || [];
+    let cartDetails = JSON.parse(localStorage.getItem("Cart")) || [];
+
+    let count = cartDetails.length
+    document.querySelector(".count").innerHTML = count;
+
+    // Builds the whole cart list from scratch every time it runs and also refreshes the summary totals
+    function loadCart() {
+      let html = "";
+
+      // Remove products from cart that no longer exist
+      cartDetails = cartDetails.filter(cartProduct =>products.some(p => p.id === cartProduct.id));
+
+      localStorage.setItem("Cart", JSON.stringify(cartDetails));
+
+      // Build one row of markup for every remaining cart item
+      cartDetails.forEach((cartProduct, index) => {
+        html += `
+        <div class="cart-row">
+            <div class="thumb p-image">
+                <img src="${cartProduct.image}" alt="${cartProduct.product}">
+            </div>
+
+            <div class="info">
+                <span class="category">${cartProduct.category}</span>
+                <h4>${cartProduct.product}</h4>
+                <span class="maker">${cartProduct.maker}</span>
+                <button class="remove-link" style="background:transparent;border:none;" onclick="removeProduct(${index})">
+                    Remove
+                </button>
+            </div>
+
+            <div class="qty-stepper">
+                <button onclick="decreaseQuantity(${index})">−</button>
+                <input type="text" id="cartValue-${index}" value="${cartProduct.cart}" readonly>
+                <button onclick="increaseQuantity(${index})">+</button>
+            </div>
+
+            <div class="line-price-${index}">₹${cartProduct.sum}</div>
+        </div>
+        `;
+      });
+
+      // Show a friendly message when there is nothing left in the cart otherwise render all the rows
+      if (cartDetails.length === 0) {
+        document.querySelector(".cart-list").innerHTML =
+          `<h3 style="color:beige;">Your Cart is Empty</h3>`;
+      } else {
+        document.querySelector(".cart-list").innerHTML = html;
+      }
+
+      updateCartCount();
+      orderSummary();
+    }
+
+    // Lowers a single item quantity by one but never below one
+    function decreaseQuantity(index) {
+      if (cartDetails[index].cart == 1) {
+        alert("Minimum 1 is required");
+        return;
+      }
+
+      cartDetails[index].cart--;
+      cartDetails[index].sum = cartDetails[index].price * cartDetails[index].cart;
+
+      localStorage.setItem("Cart", JSON.stringify(cartDetails));
+      loadCart();
+    }
+
+    // Raises a single item quantity by one while respecting available stock and a maximum of five per item
+    function increaseQuantity(index) {
+      if (cartDetails[index].cart == cartDetails[index].stock) {
+        alert("You can't add more");
+        return;
+      }
+
+      if (cartDetails[index].cart == 5) {
+        alert("You can't add more than 5");
+        return;
+      }
+
+      cartDetails[index].cart++;
+      cartDetails[index].sum = cartDetails[index].price * cartDetails[index].cart;
+      localStorage.setItem("Cart", JSON.stringify(cartDetails));
+      loadCart();
+    }
+
+    // Empties the entire cart after the shopper confirms
+    function clearCart() {
+      if (confirm("Are you sure you want to clear cart?")) {
+        cartDetails = [];
+        localStorage.setItem("Cart", JSON.stringify(cartDetails));
+        loadCart();
+      }
+    }
+
+    // Removes a single item from the cart after the shopper confirms
+    function removeProduct(index) {
+      if (confirm(`Are you sure you want to remove ${cartDetails[index].product}?`)) {
+        cartDetails.splice(index, 1);
+        localStorage.setItem("Cart", JSON.stringify(cartDetails));
+        loadCart();
+      }
+    }
+
+    // Recalculates subtotal shipping tax and total from the current cart and writes them onto the page
+    function orderSummary() {
+      let subTotal = 0;
+
+      cartDetails.forEach(cartProduct => {
+        subTotal += cartProduct.sum;
+      });
+
+      let shipping = cartDetails.length ? 199 : 0;
+      let tax = Number((subTotal * 0.05).toFixed(2));
+      let total = subTotal + shipping + tax;
+
+      document.querySelector(".sub-total").innerHTML = "₹" + subTotal;
+      document.querySelector(".shipping").innerHTML = "₹" + shipping;
+      document.querySelector(".tax").innerHTML = "₹" + tax;
+      document.querySelector(".total").innerHTML = "₹" + total;
+    }
+
+    // Updates the small item count shown on the cart icon in the header
+    function updateCartCount() {
+      document.querySelector(".count").innerHTML = cartDetails.length;
+    }
+
+    // Render the cart as soon as the page loads
+    loadCart();
+  </script>
+
+</body>
+
+</html>

@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shop All Goods — Larder & Co.</title>
+  <link rel="stylesheet" href="./assets/css/style.css">
+</head>
+
+<body>
+
+  <!-- Site header shared across every page showing the logo and navigation links -->
+  <header class="site-header">
+    <div class="wrap">
+      <a href="index.html" class="logo">Larder <span class="amp">&amp;</span> Co.</a>
+      <nav class="main-nav">
+        <a href="index.html">Home</a>
+        <a href="view-product.html" aria-current="page">Shop</a>
+        <a href="add-product.html">Sell With Us</a>
+        <a href="manage-products.html">Manage</a>
+        <a href="cart.html" class="cart-chip">Cart <span class="count">3</span></a>
+      </nav>
+    </div>
+  </header>
+
+    <!-- Main shop section split into the filters sidebar and the product grid -->
+  <main>
+    <section class="section">
+      <div class="wrap">
+
+        <p class="crumb"><a href="index.html">Home</a> / Shop</p>
+        <div class="section-head">
+          <h2>All pantry goods</h2>
+        </div>
+
+        <div class="shop-layout">
+
+          <!-- Filters sidebar for category diet and maker checked values are read by addFilter -->
+          <aside class="filters">
+            <h3>Category</h3>
+            <div class="filter-group category-list">
+              <label><input type="checkbox" id="categoryValue" value="Fruits">Fruits</label>
+              <label><input type="checkbox" id="categoryValue" value="Vegetables">Vegetables</label>
+              <label><input type="checkbox" id="categoryValue" value="Dairy">Dairy</label>
+              <label><input type="checkbox" id="categoryValue" value="Snacks">Snacks</label>
+              <label><input type="checkbox" id="categoryValue" value="Beverages">Beverages</label>
+            </div>
+
+            <h3>Diet</h3>
+            <div class="filter-group diet-list">
+              <label><input type="checkbox" id="dietValue" value="Vegan"> Vegan</label>
+              <label><input type="checkbox" id="dietValue" value="Gluten Free"> Gluten-free</label>
+              <label><input type="checkbox" id="dietValue" value="Organic"> Organic</label>
+              <label><input type="checkbox" id="dietValue" value="Dairy Free"> Dairy-free</label>
+            </div>
+
+            <h3>Maker</h3>
+            <div class="filter-group">
+              <label><input type="radio" name="maker" id="makerValue" value="All makers" checked> All makers</label>
+              <label><input type="radio" name="maker" id="makerValue" value="Meadowlight Apiary"> Meadowlight Apiary</label>
+              <label><input type="radio" name="maker" id="makerValue" value="Ferro and Sons"> Ferro &amp; Sons</label>
+              <label><input type="radio" name="maker" id="makerValue" value="Ember and Oak"> Ember &amp; Oak</label>
+            </div>
+
+            <button class="btn btn-outline btn-block" onclick="addFilter()">Apply filters</button>
+          </aside>
+
+          <!-- Results bar showing how many goods are shown plus the search box and the sort dropdown -->
+          <div>
+            <div class="results-bar">
+              <p class="count filter-count"></p>
+              <input type="text" placeholder="Search Product Name" id="searchBar">
+              <select id="sort">
+                <option value=-1>Select Sorting</option>
+                <option value="newestSort">Sort: Newest first</option>
+                <option value="lowToHighPrice">Sort: Price, low to high</option>
+                <option value="highToLowPrice">Sort: Price, high to low</option>
+                <option value="makerSort">Sort: Maker, A–Z</option>
+              </select>
+            </div>
+
+            <!-- Empty grid populated at runtime with every product that passes the current filter -->
+            <div class="grid">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer shared across every page with quick links -->
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>&copy; 2026 Larder &amp; Co. Sourced, not manufactured.</p>
+      <div class="foot-links">
+        <a href="view-product.html">Shop</a>
+        <a href="add-product.html">Sell</a>
+        <a href="manage-products.html">Manage</a>
+        <a href="cart.html">Cart</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Main shop script handles loading products filtering searching and sorting -->
+  <script>
+    // Load the inventory and cart from local storage or start with empty arrays if nothing is stored
+    products = JSON.parse(localStorage.getItem("Inventory")) || [];
+    let cartDetails=JSON.parse(localStorage.getItem("Cart")) || [];
+
+    // Working copy of products that reflects whatever filter search or sort is currently active
+    let filterData=[...products];
+
+    let count=cartDetails.length
+    document.querySelector(".count").innerHTML=count;
+    
+    // Clear the search box on every fresh page load
+    document.getElementById("searchBar").value=null;
+
+    document.getElementById("sort").addEventListener("change",()=>{
+      let value=document.getElementById("sort").value;
+      sort(value);
+    });
+
+    // Builds the product grid from filterData and rewires the sort and search listeners each time it runs
+    function loadProducts() {
+      let html = "";
+
+      // Find where this product actually sits in the full inventory so the product page link uses the right index
+      filterData.map((p) => {
+        let index;
+        products.forEach((product,id)=>{
+          if(product==p){
+            index=id;
+          }
+        });
+
+        html += `
+        <a class="jar" href="product.html?index=${index}">
+              <div class="jar-art">
+                <div class="photo"><img src="${p.image}" alt="Fig and walnut preserve"></div>
+              </div>
+              <div class="jar-meta">
+                <span class="category">${p.category}</span>
+                <h3>${p.product}</h3>
+                <p class="maker">${p.maker}</p>
+                <p class="price">₹${p.price}</p>
+              </div>
+            </a>
+      `;
+      })
+
+      // Show a friendly message when no product matches the current filter
+      if(filterData.length==0){
+        html=`
+          <h3>No Products for given filter!</h3>
+        `;
+      }
+
+      document.querySelector(".grid").innerHTML = html;
+      filterCount();
+
+      document.getElementById("sort").addEventListener("change",()=>{
+        let value=document.getElementById("sort").value;
+        sort(value);
+      })
+
+      document.getElementById("searchBar").addEventListener("input",search);
+    }
+
+    // Reads every checked category diet and maker option then narrows filterData down to matching products
+    function addFilter(){
+      filterData=[...products];
+      document.getElementById("sort").value=-1;
+
+      // selected category list
+      let categoryList=document.querySelectorAll("#categoryValue");
+      let selectedCategories=[];
+      for(category of categoryList){
+        if(category.checked){
+          selectedCategories.push(category.value);
+        }
+      }
+
+      // selected diet list
+      let dietList=document.querySelectorAll("#dietValue");
+      let selectedDiet=[];
+      for(diet of dietList){
+        if(diet.checked){
+          selectedDiet.push(diet.value);
+        }
+      }
+
+      // selected maker list
+      let selectedMaker=document.querySelector(`input[name="maker"]:checked`).value;
+
+      filterData=filterData.filter(product=>
+        (selectedCategories.length==0?true:selectedCategories.some(category=>category==product.category)) && 
+        (selectedDiet.length==0?true:selectedDiet.some(diet=>diet==product.diet)) &&
+        ((selectedMaker==product.maker?true:(selectedMaker=="All makers"?true:false)))
+      );
+
+      // display products
+      loadProducts();
+      filterCount();
+      document.getElementById("sort").addEventListener("change",()=>{
+        let value=document.getElementById("sort").value;
+        sort(value);
+      });
+
+      // filterData=[...products];
+    }
+
+    // Updates the small showing count text above the product grid
+    function filterCount(){
+      document.querySelector(`.filter-count`).textContent="Showing " +  filterData.length + " of " + products.length + " goods";
+    }
+    
+    document.getElementById("sort").addEventListener("change",()=>{
+      let value=document.getElementById("sort").value;
+      sort(value);
+    });
+
+    // Reorders filterData by the chosen sort option then rerenders the grid without losing the current filter
+    function sort(value){
+      let sortArr=[];
+      let storeData=[...filterData];
+
+      if(value=="newestSort"){
+        filterData.forEach(product=>{sortArr.unshift(product)});
+        filterData=[...sortArr];
+      }
+      else if(value=="lowToHighPrice"){
+        filterData.sort((a,b)=>a.price-b.price);
+      }
+      else if(value=="highToLowPrice"){
+        filterData.sort((a,b)=>b.price-a.price);
+      }
+      else if(value=="makerSort"){
+        filterData.sort((a,b)=>a.maker.localeCompare(b.maker));
+      }
+
+      sortArr=[];
+      loadProducts();
+      filterData=[...storeData];
+    }
+
+    // Resets every filter checkbox and radio back to its default state
+    function removeFilter(){
+      document.querySelectorAll("#categoryValue").forEach(checkbox=>{
+        checkbox.checked=false
+      });
+      document.querySelectorAll("#dietValue").forEach(checkbox=>{
+        checkbox.checked=false
+      });
+      document.querySelector(`input[name="maker"][value="All makers"]`).checked=true;
+      document.getElementById("sort").value=-1;
+    }
+
+    // Filters products by whatever text is typed into the search box matching against the product name
+    function search(){
+      removeFilter();
+      filterData=[...products];
+      let searchData=[];
+
+      loadProducts();
+      let searchValue=document.getElementById("searchBar").value.toLowerCase().trim();
+      filterData.forEach(product=>{
+        if(product.product.toLowerCase().includes(searchValue)){
+          searchData.push(product);
+        }
+      });
+      filterData=[...searchData];
+      loadProducts();
+    }
+
+    // Render the product grid as soon as the page loads
+    loadProducts();
+  </script>
+</body>
+
+</html>
