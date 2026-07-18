@@ -137,12 +137,20 @@ This project is built using HTML, CSS and JavaScript to create a working **E-Com
 ## 📂 Project Structure
 
 ```text
-Larder-and-Co/
+grocery-store-inventory-system/
 │
 ├── assets/
-│   └── css/
-│       └── style.css
-│
+│   ├── css/
+│   |   └── style.css
+|   |
+|   └── output/
+|       ├── index-page.jpeg
+│       ├── view-product-page.jpeg
+|       ├── single-product-view-page.jpeg
+|       ├── cart-page.jpeg
+|       ├── add-product-page.jpeg
+|       └── manage-product-page.jpeg
+|
 ├── index.html
 ├── add-product.html
 ├── view-product.html
@@ -156,7 +164,23 @@ Larder-and-Co/
 
 ## 📸 Screenshot
 
-<img src="assets/output.png" width="800" alt="Larder and Co Output">
+### Index Page
+<img src="assets/output/index-page.jpeg" width="800" alt="Index Page">
+
+### View Product Page
+<img src="assets/output/view-product-page.jpeg" width="800" alt="View Product Page">
+
+### Single Product View Page
+<img src="assets/output/single-product-view-page.jpeg" width="800" alt="Single Product View Page">
+
+### Cart Page
+<img src="assets/output/cart-page.jpeg" width="800" alt="Cart Page">
+
+### Add Product Page
+<img src="assets/output/add-product-page.jpeg" width="800" alt="Add Product Page">
+
+### Manage Product Page
+<img src="assets/output/manage-product-page.jpeg" width="800" alt="Manage Product Page">
 
 ---
 
@@ -164,7 +188,7 @@ Larder-and-Co/
 
 | | |
 |---|---|
-| 🔗 Live Demo                 | Add your deployed link here |
+| 🔗 Live Demo                 | [Add your deployed link here](https://grocery-store-inventory-system.netlify.app/) |
 | 🎥 Project Explanation Video | Add your video link here |
 | 🎥 Project Recording | Add your recording link here |
 
