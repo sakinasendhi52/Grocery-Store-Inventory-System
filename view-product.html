@@ -192,12 +192,12 @@
       }
 
       // selected maker list
-      let selectedMaker=document.querySelector(`input[name="maker"]:checked`).value;
+      let selectedMaker=document.querySelector(`input[name="maker"]:checked`).value.toLowerCase();
 
       filterData=filterData.filter(product=>
         (selectedCategories.length==0?true:selectedCategories.some(category=>category==product.category)) && 
         (selectedDiet.length==0?true:selectedDiet.some(diet=>diet==product.diet)) &&
-        ((selectedMaker==product.maker?true:(selectedMaker=="All makers"?true:false)))
+        ((selectedMaker==product.maker.toLowerCase()?true:(selectedMaker=="All makers"?true:false)))
       );
 
       // display products
@@ -207,8 +207,6 @@
         let value=document.getElementById("sort").value;
         sort(value);
       });
-
-      // filterData=[...products];
     }
 
     // Updates the small showing count text above the product grid
