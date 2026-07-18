@@ -188,7 +188,7 @@ grocery-store-inventory-system/
 
 | | |
 |---|---|
-| 🔗 Live Demo                 | [Add your deployed link here](https://grocery-store-inventory-system.netlify.app/) |
+| 🔗 Live Demo                 | [Grocery Store Inventory System](https://grocery-store-inventory-system.netlify.app/) |
 | 🎥 Project Explanation Video | Add your video link here |
 | 🎥 Project Recording | Add your recording link here |
 
@@ -198,9 +198,9 @@ grocery-store-inventory-system/
 
 <div align="center">
 
-**Your Name**
+**Sakina Sendhi**
 
-[![GitHub](https://img.shields.io/badge/GitHub-yourusername-181717?style=for-the-badge&logo=github)](https://github.com/yourusername)
+[![GitHub](https://img.shields.io/badge/GitHub-sakinasendhi52-181717?style=for-the-badge&logo=github)](https://github.com/sakinasendhi52)
 
 ⭐ Thank you for visiting this repository!
 
