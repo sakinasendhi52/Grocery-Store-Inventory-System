@@ -189,8 +189,8 @@ grocery-store-inventory-system/
 | | |
 |---|---|
 | 🔗 Live Demo                 | [Grocery Store Inventory System](https://grocery-store-inventory-system.netlify.app/) |
-| 🎥 Project Explanation Video | Add your video link here |
-| 🎥 Project Recording | Add your recording link here |
+| 🎥 Project Explanation Video | [Explanation Video](https://drive.google.com/file/d/1gThnrJiEVhMuxKY7X0Kb3q7CkfHUV01j/view?usp=drive_link) |
+| 🎥 Project Recording | [Website Video](https://drive.google.com/file/d/1xUl7eiAzRjb26_CI6qNzSvVPUZhvrPMi/view?usp=drive_link) |
 
 ---
 
