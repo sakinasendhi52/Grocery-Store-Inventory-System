@@ -197,7 +197,7 @@
       filterData=filterData.filter(product=>
         (selectedCategories.length==0?true:selectedCategories.some(category=>category==product.category)) && 
         (selectedDiet.length==0?true:selectedDiet.some(diet=>diet==product.diet)) &&
-        ((selectedMaker==product.maker.toLowerCase()?true:(selectedMaker=="All makers"?true:false)))
+        ((selectedMaker==product.maker.toLowerCase()?true:(selectedMaker=="all makers"?true:false)))
       );
 
       // display products
