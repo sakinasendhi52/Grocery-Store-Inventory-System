@@ -410,61 +410,7 @@
               "A naturally sweet mix of dried cranberries, blueberries, and mulberries no added sugar or preservatives.",
           }
         ];
-        // Older sample product list kept here as backup reference and not currently used
-        // const defaultProducts = [
-        //   {
-        //     id: Date.now(),
-        //     product: "Wildflower Honey",
-        //     maker: "Meadowlight Apiary",
-        //     category: "Fruits",
-        //     diet: "Gluten Free",
-        //     price: 200,
-        //     stock: 18,
-        //     image:
-        //       "https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=400&q=80",
-        //     description:
-        //       "Raw and unfiltered wildflower honey, pulled from hives set among clover and wild aster.",
-        //   },
-        //   {
-        //     id: Date.now() + 1,
-        //     product: "Blood Orange Marmalade",
-        //     maker: "Ferro and Sons",
-        //     category: "Dairy",
-        //     diet: "Vegan",
-        //     price: 150,
-        //     stock: 25,
-        //     image:
-        //       "https://images.unsplash.com/photo-1519996529931-28324d5a630e?w=400&q=80",
-        //     description:
-        //       "Tangy blood orange marmalade, slow-cooked with peel for a bold citrus bite.",
-        //   },
-        //   {
-        //     id: Date.now() + 2,
-        //     product: "Sourdough Boule",
-        //     maker: "Ember and Oak",
-        //     category: "Vegetables",
-        //     diet: "Vegan",
-        //     price: 800,
-        //     stock: 20,
-        //     image:
-        //       "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=400&q=80",
-        //     description:
-        //       "Naturally leavened and slow-fermented for depth — a crackling crust and airy, tangy crumb.",
-        //   },
-        //   {
-        //     id: Date.now() + 3,
-        //     product: "Aged Cheddar Wheel",
-        //     maker: "Hollow Creek Dairy",
-        //     category: "Dairy",
-        //     diet: "Gluten Free",
-        //     price: 2000,
-        //     stock: 10,
-        //     image:
-        //       "https://images.unsplash.com/photo-1552767059-ce182ead6c1b?w=400&q=80",
-        //     description:
-        //       "Slow-aged to sharp, nutty perfection — crafted the traditional way, with nothing rushed and nothing added.",
-        //   },
-        // ];
+        
         // Save the starter products into local storage so they persist across future visits
         localStorage.setItem("Inventory", JSON.stringify(defaultProducts));
         products = JSON.parse(localStorage.getItem("Inventory"));
